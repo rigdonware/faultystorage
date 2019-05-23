@@ -18,16 +18,16 @@ void Button::InitButton(int x, int y, int width, int height, std::string buttonT
 	m_GuiRect.setPosition(x, y);
 	m_GuiRect.setSize(size);
 
-	sf::Font font;
-	if (!font.loadFromFile("arial.ttf"))
+	if (!m_Font.loadFromFile("arial.ttf"))
 		std::cout << "Failed to load button font" << std::endl;
 
-	m_Text.setFont(font);
+	m_Text.setFont(m_Font);
 	m_Text.setStyle(sf::Text::Bold);
 	m_Text.setString(buttonText);
-	m_Text.setFillColor(sf::Color::White);
-	m_Text.setCharacterSize(m_Rect.width / buttonText.length());
-	m_Text.setPosition(m_Rect.left, m_Rect.top);
+	m_Text.setFillColor(sf::Color::Black);
+	m_Text.setCharacterSize(20);
+	m_Text.setPosition(m_Rect.left + (m_Rect.width / 2) - (m_Text.getGlobalBounds().width / 2), 
+					   m_Rect.top + (m_Rect.height / 2) - (m_Text.getGlobalBounds().height / 2));
 }
 
 bool Button::IsButtonPressed(int mouseX, int mouseY)

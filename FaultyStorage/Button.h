@@ -13,4 +13,5 @@ public:
 	sf::IntRect m_Rect;
 	sf::RectangleShape m_GuiRect;
 	sf::Text m_Text;
+	sf::Font m_Font;
 };
