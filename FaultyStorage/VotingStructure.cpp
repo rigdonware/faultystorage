@@ -18,6 +18,9 @@ void VotingStructure::LoadContents(NetworkHelper& network)
 	for (int i = 1; i <= 3; i++)
 	{
 		m_Contents[i].clear();
-		network.SendReadMessage(m_FileName, ('0' + i));
+		if (i == 1)
+			network.SendReadMessage(m_FileName, NULL);
+		else
+			network.SendReadMessage(m_FileName, ('0' + i));
 	}
 }

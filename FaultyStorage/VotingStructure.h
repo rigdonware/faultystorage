@@ -14,6 +14,7 @@ public:
 	std::tuple<std::string, std::vector<unsigned char>> m_ContentsFile2;
 	std::tuple<std::string, std::vector<unsigned char>> m_ContentsFile3;
 	bool doVoting = false;
+	double votingElapsedTime = 0.0;
 	void Vote(NetworkHelper& network);
 	void LoadContents(NetworkHelper& network);
 };

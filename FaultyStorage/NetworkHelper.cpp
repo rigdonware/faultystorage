@@ -16,8 +16,22 @@ void NetworkHelper::SendReadMessage(std::string fileToRead, char fileNum)
 {
 	unsigned char code[1]; code[0] = 'R';
 	unsigned char file[32] = "";
-	for (int i = 0; i < fileToRead.length(); i++)
-		file[i] = fileToRead[i];
+
+	if (fileNum != NULL)
+	{
+		file[0] = fileNum;
+		int count = 0;
+		for (int i = 1; i <= fileToRead.length(); i++)
+		{
+			file[i] = fileToRead[count];
+			count++;
+		}
+	}
+	else
+	{
+		for (int i = 0; i < fileToRead.length(); i++)
+			file[i] = fileToRead[i];
+	}
 
 	unsigned int location = 0;
 
@@ -301,10 +315,10 @@ void NetworkHelper::ReceiveAckMessage(std::vector<unsigned char> bits)
 
 	unsigned int length = bits.at(37);
 
-	if (length == 0)
-	{
-		structure->doVoting = true;
-	}
+	//if (length == 0)
+	//{
+	//	structure->doVoting = true;
+	//}
 
 	//unsigned char valid = bits.at(bits.size() - 1);
 	//if (!valid)
@@ -369,7 +383,7 @@ void NetworkHelper::ReceiveDataMessage(std::vector<unsigned char> bits)
 
 	count = 0;
 	
-	std::ofstream fout(fileTitle, std::ofstream::out | std::ofstream::app);
+	std::ofstream fout(fileTitle, std::ofstream::out | std::ofstream::app | std::ofstream::binary);
 
 	for (int i = 38; i < 48; i++)
 	{

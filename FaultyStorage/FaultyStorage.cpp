@@ -44,10 +44,13 @@ int main()
 
 	sf::Clock clock;
 	double elapsedTime = 0.0;
+
+	bool canDoAction = true;
+
 	while (window.isOpen())
 	{
 		sf::Time elapsed = clock.restart();
-		elapsedTime += elapsed.asSeconds();
+		elapsedTime = elapsed.asSeconds();
 		sf::Event event;
 
 		while (window.pollEvent(event))
@@ -57,34 +60,62 @@ int main()
 				window.close();
 			}
 
+			if(event.type == sf::Event::MouseButtonReleased)
+				canDoAction = true;
+
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
-			if (writeSmallTextButton.IsButtonPressed(mousePos.x, mousePos.y))
+			if (canDoAction)
 			{
-				network.SendWriteMessage("SmallTextFile.txt");
-				smallTextFile->doVoting = true;
+				if (writeSmallTextButton.IsButtonPressed(mousePos.x, mousePos.y))
+				{
+					network.SendWriteMessage("SmallTextFile.txt");
+					canDoAction = false;
+					smallTextFile->doVoting = true;
+				}
+
+				if (writeLargeTextButton.IsButtonPressed(mousePos.x, mousePos.y))
+				{
+					network.SendWriteMessage("LargeTextFile.txt");
+					canDoAction = false;
+					largeTextFile->doVoting = true;
+				}
+
+				if (writeSmallBinaryButton.IsButtonPressed(mousePos.x, mousePos.y))
+				{
+					network.SendWriteMessage("SmallBinary.jpg");
+					canDoAction = false;
+				}
+				if (writeLargeBinaryButton.IsButtonPressed(mousePos.x, mousePos.y))
+				{
+					network.SendWriteMessage("LargeBinary.wav");
+					canDoAction = false;
+				}
+
+				if (readSmallTextButton.IsButtonPressed(mousePos.x, mousePos.y))
+				{
+					network.SendReadMessage("SmallTextFile.txt");
+					canDoAction = false;
+				}
+
+				if (readLargeTextButton.IsButtonPressed(mousePos.x, mousePos.y))
+				{
+					network.SendReadMessage("LargeTextFile.txt");
+					canDoAction = false;
+				}
+
+				if (readSmallBinaryButton.IsButtonPressed(mousePos.x, mousePos.y))
+				{
+					network.SendReadMessage("SmallBinary.jpg");
+					canDoAction = false;
+				}
+
+				if (readLargeBinaryButton.IsButtonPressed(mousePos.x, mousePos.y))
+				{
+					network.SendReadMessage("LargeBinary.wav");
+					canDoAction = false;
+				}
 			}
-			
-			if(writeLargeTextButton.IsButtonPressed(mousePos.x, mousePos.y))
-				network.SendWriteMessage("LargeTextFile.txt");
-			
-			if(writeSmallBinaryButton.IsButtonPressed(mousePos.x, mousePos.y))
-				network.SendWriteMessage("SmallBinary.jpg");
-
-			if(writeLargeBinaryButton.IsButtonPressed(mousePos.x, mousePos.y))
-				network.SendWriteMessage("LargeBinary.wav");
-
-			if (readSmallTextButton.IsButtonPressed(mousePos.x, mousePos.y))
-				network.SendReadMessage("SmallTextFile.txt");
-			
-			if(readLargeTextButton.IsButtonPressed(mousePos.x, mousePos.y))
-				network.SendReadMessage("LargeTextFile.txt");
-			
-			if(readSmallBinaryButton.IsButtonPressed(mousePos.x, mousePos.y))
-				network.SendReadMessage("SmallBinary.jpg");
-			
-			if(readLargeBinaryButton.IsButtonPressed(mousePos.x, mousePos.y))
-				network.SendReadMessage("LargeBinary.wav");
 		}
 
 		network.ReceiveMessage();
@@ -95,13 +126,18 @@ int main()
 		//	elapsedTime = 0;
 		//}
 
-		for (auto& vote : votingStructures)
+		for (auto& structure : votingStructures)
 		{
-			if (vote->doVoting)
+			if (structure->doVoting)
 			{
-				vote->Vote(network);
+				structure->votingElapsedTime += elapsedTime;
+				if (structure->votingElapsedTime >= 5)
+				{
+					structure->Vote(network);
+					structure->votingElapsedTime = 0;
+				}
 			}
-		}x
+		}
 
 		window.clear();
 
