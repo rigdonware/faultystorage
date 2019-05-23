@@ -133,7 +133,7 @@ int main()
 				structure->votingElapsedTime += elapsedTime;
 				if (structure->votingElapsedTime >= 5)
 				{
-					structure->Vote(network);
+					//structure->Vote(network);
 					structure->votingElapsedTime = 0;
 				}
 			}

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <windows.h>
 
 NetworkHelper::NetworkHelper()
 {
@@ -103,6 +104,7 @@ void NetworkHelper::SendWriteMessage(std::string fileToWrite, char fileNum)
 		}
 		memset(contents, 0, sizeof(contents));
 		location += 10;
+		Sleep(50);
 	}
 
 	for (int i = 0; i < 10; i++)
@@ -186,12 +188,13 @@ void NetworkHelper::SendWriteRetryMessage(std::vector<unsigned char> bits)
 	packet.append(&location, 4);
 	packet.append(&length, 1);
 	packet.append(&data, 10);
-
+	Sleep(50);
 	if (m_Socket.send(packet, m_Ip, sendPort) != sf::Socket::Done)
 	{
 		std::cout << "Failed to send packet" << std::endl;
 		std::cout << "Error: " << m_Socket.Error << std::endl;
 	}
+	
 }
 
 void NetworkHelper::SendReadRetryMessage(std::vector<unsigned char> bits)

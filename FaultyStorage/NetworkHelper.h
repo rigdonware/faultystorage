@@ -8,6 +8,10 @@ class NetworkHelper
 {
 public:
 	NetworkHelper();
+	void operator()(std::string fileToWrite)
+	{
+		SendWriteMessage(fileToWrite);
+	}
 	void ReceiveMessage();
 	void SendReadMessage(std::string fileToRead, char fileNum = NULL);
 	void SendReadRetryMessage(std::vector<unsigned char> bits);
